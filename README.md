@@ -59,14 +59,13 @@ La base de datos está optimizada para la alta rotación del sector petrolero y 
 ---
 
 ## ⚙️ Guía de Instalación y Ejecución
-### 1. Configurar el Backend y frontend
-Abre una nueva terminal en la raíz del proyecto y ejecuta los siguientes comandos para el backend:
-```bash
-cd server
-npm install.
 
-Abre una nueva terminal en la raíz del proyecto y ejecuta los siguientes comandos para el frontend:
+Para poner en marcha el proyecto localmente, ejecuta los siguientes comandos desde la raíz del repositorio:
+
 ```bash
-cd client
+# 1. Instalar dependencias globales / necesarias
 npm install
+# 2. Iniciar el entorno de desarrollo del frontend
+npx vite
+# 3. Iniciar el entorno de desarrollo del backend
 npm run dev
