@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. Roles estrictos del sistema
+enum Rol {
+  SUPERADMIN // Clinica / Administracion general (crea usuarios y empresas)
+  MEDICO     // Personal medico (acceso exclusivo a detalleClinico)
+  RECEPCION  // Gestion de agenda y turnos (sin acceso a detalleClinico)
+  EMPRESA    // RRHH Petrolera (solo ve su dotacion y carga Excel)
+  PACIENTE   // Operario (ingresa por DNI, confirma turnos y ve su QR)
+}
+
+// 2. Sedes operativas
+enum Sede {
+  NEUQUEN_CAPITAL
+  RINCON_DE_LOS_SAUCES
+}
+
+// 3. Flujo de estados de Turnos con validacion bilateral
+enum EstadoTurno {
+  PROPUESTO_CLINICA         // La clinica ofrece fecha/hora
+  APROBADO_EMPRESA          // La empresa valida que el operario puede asistir
+  CONFIRMADO_PACIENTE       // El operario confirma asistencia definitiva
+  REPROGRAMACION_SOLICITADA // El operario o empresa pide cambio de fecha
+  ATENDIDO                  // Examen realizado y apto emitido
+  CANCELADO                 // Turno anulado
+}
+
+enum ResultadoApto {
+  APTO
+  APTO_CON_PREEXISTENCIAS
+  NO_APTO
+}
+
+// Modelo de Usuarios del Sistema (Creados exclusivamente por SUPERADMIN)
+model Usuario {
+  id           String   @id @default(uuid())
+  email        String   @unique // Cuentas Gmail / corporativas asignadas por SuperAdmin
+  passwordHash String
+  nombre       String
+  rol          Rol
+  sede         Sede?    // Asignada para MEDICO o RECEPCION
+  empresaId    String?  // Asignada obligatoriamente si rol == EMPRESA
+  empresa      Empresa? @relation(fields: [empresaId], references: [id])
+  activo       Boolean  @default(true)
+  creadoEn     DateTime @default(now())
+}
+
+// Empresas cliente de la cuenca
+model Empresa {
+  id           String     @id @default(uuid())
+  razonSocial  String
+  cuit         String     @unique
+  emailAlertas String
+  usuarios     Usuario[]  // Usuarios de RRHH habilitados para esta empresa
+  pacientes    Paciente[] // Dotacion de operarios vinculada
+  turnos       Turno[]
+  creadoEn     DateTime   @default(now())
+}
+
+// Parametrizacion de puestos y vigencias en meses
+model Puesto {
+  id            String   @id @default(uuid())
+  nombrePuesto  String   @unique
+  vigenciaMeses Int      @default(12)
+  turnos        Turno[]
+}
+
+// Operarios / Pacientes (Ingresan con DNI)
+model Paciente {
+  id             String       @id @default(uuid())
+  dni            String       @unique
+  cuil           String       @unique
+  nombreCompleto String
+  telefono       String?
+  empresaId      String
+  empresa        Empresa      @relation(fields: [empresaId], references: [id])
+  turnos         Turno[]
+  aptos          AptoMedico[]
+  creadoEn       DateTime     @default(now())
+}
+
+// Agenda y flujo de turnos
+model Turno {
+  id                    String      @id @default(uuid())
+  fechaHora             DateTime
+  sede                  Sede
+  estado                EstadoTurno @default(PROPUESTO_CLINICA)
+  motivoCambioFecha     String?     // Observacion si el paciente pide reprogramar
+  aprobadoPorEmpresa    Boolean     @default(false)
+  confirmadoPorPaciente Boolean     @default(false)
+  
+  pacienteId            String
+  paciente              Paciente    @relation(fields: [pacienteId], references: [id])
+  
+  empresaId             String
+  empresa               Empresa     @relation(fields: [empresaId], references: [id])
+  
+  puestoId              String
+  puesto                Puesto      @relation(fields: [puestoId], references: [id])
+  
+  aptoMedico            AptoMedico?
+  creadoEn              DateTime    @default(now())
+}
+
+// Certificados de Aptitud Medica
+model AptoMedico {
+  id               String        @id @default(uuid())
+  resultado        ResultadoApto
+  fechaEmision     DateTime      @default(now())
+  fechaVencimiento DateTime
+  detalleClinico   String        // CONFIDENCIAL: Solo accesible por rol MEDICO
+  
+  turnoId          String        @unique
+  turno            Turno         @relation(fields: [turnoId], references: [id])
+  
+  pacienteId       String
+  paciente         Paciente      @relation(fields: [pacienteId], references: [id])
+}
