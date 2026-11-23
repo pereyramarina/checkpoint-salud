@@ -1,46 +1,38 @@
 <template>
   <div class="space-y-8">
-    <!-- Métricas Rápidas (KPIs) -->
+    <!-- Métricas Rápidas (KPIs con íconos sueltos sin cajita de fondo) -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Empresas Contratistas</p>
           <p class="text-2xl font-bold text-slate-900 mt-1">{{ empresas.length }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
-          <Building2 class="w-5 h-5" />
-        </div>
+        <Building2 class="w-6 h-6 text-sky-600 shrink-0" />
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Sedes Activas</p>
           <p class="text-2xl font-bold text-slate-900 mt-1">2</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-          <MapPin class="w-5 h-5" />
-        </div>
+        <MapPin class="w-6 h-6 text-emerald-600 shrink-0" />
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Roles Habilitados</p>
           <p class="text-2xl font-bold text-slate-900 mt-1">4</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-          <UserCog class="w-5 h-5" />
-        </div>
+        <UserCog class="w-6 h-6 text-indigo-600 shrink-0" />
       </div>
     </div>
 
-    <!-- Formularios de Alta -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Formularios de Alta (ocultos al imprimir padrón de empresas) -->
+    <div class="no-print grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Alta Empresa -->
       <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
-            <Building2 class="w-4 h-4" />
-          </div>
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
+          <Building2 class="w-5 h-5 text-sky-600 shrink-0" />
           <div>
             <h2 class="text-sm font-semibold text-slate-900">Registrar Nueva Empresa Cliente</h2>
             <p class="text-xs text-slate-500">Habilitación de contratistas para autogestión de nómina.</p>
@@ -87,9 +79,9 @@
             <button
               type="submit"
               :disabled="cargandoEmp"
-              class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+              class="btn-interactive group w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Plus class="w-4 h-4" />
+              <Plus class="w-4 h-4 transition-transform duration-200 group-hover:rotate-90" />
               <span>{{ cargandoEmp ? 'Guardando...' : 'Guardar Empresa' }}</span>
             </button>
 
@@ -107,10 +99,8 @@
 
       <!-- Alta Usuario -->
       <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden flex flex-col">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-            <UserPlus class="w-4 h-4" />
-          </div>
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
+          <UserPlus class="w-5 h-5 text-indigo-600 shrink-0" />
           <div>
             <h2 class="text-sm font-semibold text-slate-900">Crear Cuenta de Usuario</h2>
             <p class="text-xs text-slate-500">Asignación de credenciales para personal clínico o RRHH.</p>
@@ -197,9 +187,9 @@
             <button
               type="submit"
               :disabled="cargandoUsr"
-              class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+              class="btn-interactive group w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
             >
-              <UserPlus class="w-4 h-4" />
+              <UserPlus class="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
               <span>{{ cargandoUsr ? 'Creando cuenta...' : 'Crear Usuario' }}</span>
             </button>
 
@@ -216,16 +206,39 @@
       </div>
     </div>
 
-    <!-- Tabla de Empresas Registradas (Estándar Nuxt UI Table) -->
-    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-4">
+    <!-- Tabla de Empresas Registradas -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden print-clean-card">
+      <div class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 class="text-sm font-semibold text-slate-900">Empresas Clientes Registradas</h3>
           <p class="text-xs text-slate-500">Padrón de contratistas habilitadas en la plataforma.</p>
         </div>
-        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
-          {{ empresas.length }} {{ empresas.length === 1 ? 'empresa' : 'empresas' }}
-        </span>
+
+        <div class="no-print flex items-center gap-2 flex-wrap">
+          <button
+            v-if="empresas.length > 0"
+            type="button"
+            @click="exportarEmpresasExcel"
+            class="btn-secondary group px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-50/60 text-slate-700 hover:text-emerald-800 border border-slate-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+          >
+            <FileSpreadsheet class="w-3.5 h-3.5 text-emerald-600 transition-transform duration-200 group-hover:scale-110" />
+            <span>Exportar Excel</span>
+          </button>
+
+          <button
+            v-if="empresas.length > 0"
+            type="button"
+            @click="imprimirEmpresas"
+            class="btn-secondary group px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+          >
+            <Printer class="w-3.5 h-3.5 text-sky-600 transition-transform duration-200 group-hover:scale-110" />
+            <span>Imprimir / PDF</span>
+          </button>
+
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+            {{ empresas.length }} {{ empresas.length === 1 ? 'empresa' : 'empresas' }}
+          </span>
+        </div>
       </div>
 
       <div class="overflow-x-auto">
@@ -264,7 +277,18 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { Building2, MapPin, UserCog, UserPlus, Plus, CheckCircle2, AlertCircle } from 'lucide-vue-next';
+import * as XLSX from 'xlsx';
+import {
+  Building2,
+  MapPin,
+  UserCog,
+  UserPlus,
+  Plus,
+  CheckCircle2,
+  AlertCircle,
+  FileSpreadsheet,
+  Printer,
+} from 'lucide-vue-next';
 import http from '../api/http';
 
 const empresas = ref<any[]>([]);
@@ -337,6 +361,25 @@ async function crearUsuario() {
   } finally {
     cargandoUsr.value = false;
   }
+}
+
+function exportarEmpresasExcel() {
+  const filas = empresas.value.map((emp) => ({
+    'Razón Social': emp.razonSocial,
+    CUIT: emp.cuit,
+    'Email Alertas RRHH': emp.emailAlertas,
+    Estado: 'Activa',
+  }));
+
+  const hoja = XLSX.utils.json_to_sheet(filas);
+  hoja['!cols'] = [{ wch: 32 }, { wch: 18 }, { wch: 30 }, { wch: 14 }];
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, 'Empresas_Clientes');
+  XLSX.writeFile(libro, `Empresas_Clientes_${new Date().toISOString().slice(0, 10)}.xlsx`);
+}
+
+function imprimirEmpresas() {
+  window.print();
 }
 
 onMounted(cargarEmpresas);

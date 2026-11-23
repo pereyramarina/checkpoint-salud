@@ -1,14 +1,14 @@
 ﻿<template>
   <div class="min-h-screen flex bg-slate-50/80 text-slate-900">
-    <!-- Sidebar Lateral (Desktop) -->
-    <aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-white border-r border-slate-200/80 z-30">
-      <!-- Logo -->
-      <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-200/80 group">
-        <div class="w-8 h-8 rounded-lg bg-slate-900 text-sky-400 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3">
-          <ShieldCheck class="w-5 h-5" />
-        </div>
+    <!-- Sidebar Lateral (Desktop - oculto al imprimir) -->
+    <aside class="no-print hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 bg-white border-r border-slate-200/80 z-30">
+      <!-- Marca limpia sin cajita ni sombra alrededor del ícono -->
+      <div class="h-16 flex items-center gap-2.5 px-6 border-b border-slate-200/80 group">
+        <ShieldCheck class="w-7 h-7 text-sky-600 shrink-0 transition-transform duration-300 group-hover:scale-105" />
         <div class="min-w-0">
-          <span class="font-bold text-sm tracking-tight text-slate-900 block truncate">CheckPoint Salud</span>
+          <span class="font-bold text-sm tracking-tight text-slate-900 block truncate">
+            CheckPoint <span class="text-sky-600">Salud</span>
+          </span>
           <span class="text-[11px] text-slate-500 block truncate">Medicina Ocupacional</span>
         </div>
       </div>
@@ -18,8 +18,8 @@
         <div>
           <p class="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">Espacio de Trabajo</p>
           <nav class="space-y-1">
-            <a href="#" @click.prevent class="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-100/90 text-slate-900 font-medium text-sm transition-all">
-              <component :is="rolConfig.icono" class="w-4 h-4 text-sky-600 shrink-0" />
+            <a href="#" @click.prevent class="group flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-100/90 text-slate-900 font-medium text-sm transition-all">
+              <component :is="rolConfig.icono" class="w-4 h-4 text-sky-600 shrink-0 transition-transform duration-200 group-hover:scale-110" />
               <span class="truncate">{{ rolConfig.titulo }}</span>
             </a>
             <router-link
@@ -28,7 +28,7 @@
               class="group flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-sm transition-all"
             >
               <span class="flex items-center gap-3 truncate">
-                <QrCode class="w-4 h-4 text-slate-400 group-hover:text-sky-600 transition-colors shrink-0" />
+                <QrCode class="w-4 h-4 text-slate-400 group-hover:text-sky-600 transition-all duration-200 group-hover:scale-110 shrink-0" />
                 <span>Portería / Verificar</span>
               </span>
               <ExternalLink class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -71,25 +71,30 @@
           <button
             @click="salir"
             title="Cerrar sesión"
-            class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 active:scale-95 transition-all cursor-pointer"
+            class="group p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 active:scale-95 transition-all cursor-pointer"
           >
-            <LogOut class="w-4 h-4" />
+            <LogOut class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </button>
         </div>
       </div>
     </aside>
 
     <!-- Contenedor Principal -->
-    <div class="flex-1 md:pl-64 flex flex-col min-w-0">
-      <!-- Topbar -->
-      <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 px-4 sm:px-8 flex items-center justify-between gap-4">
+    <div class="flex-1 md:pl-64 print:pl-0 flex flex-col min-w-0">
+      <!-- Topbar (oculto al imprimir) -->
+      <header class="no-print h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-20 px-4 sm:px-8 flex items-center justify-between gap-4">
         <div class="flex items-center gap-2 text-sm min-w-0">
-          <span class="text-slate-400 hidden sm:inline">CheckPoint</span>
-          <ChevronRight class="w-4 h-4 text-slate-300 hidden sm:inline shrink-0" />
-          <h1 class="font-semibold text-slate-900 truncate">{{ rolConfig.titulo }}</h1>
+          <!-- Marca en móvil -->
+          <div class="md:hidden flex items-center gap-2 mr-1">
+            <ShieldCheck class="w-5 h-5 text-sky-600 shrink-0" />
+            <span class="font-bold text-sm text-slate-900">CheckPoint</span>
+          </div>
+          <span class="text-slate-400 hidden md:inline">CheckPoint</span>
+          <ChevronRight class="w-4 h-4 text-slate-300 hidden md:inline shrink-0" />
+          <h1 class="font-semibold text-slate-900 truncate hidden sm:block">{{ rolConfig.titulo }}</h1>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
           <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/70">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             Sistema Operativo
@@ -97,15 +102,30 @@
 
           <button
             @click="salir"
-            class="md:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 bg-rose-50 active:scale-95 transition-all cursor-pointer"
+            class="md:hidden btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-200/70 cursor-pointer"
           >
             <LogOut class="w-3.5 h-3.5" /> Salir
           </button>
         </div>
       </header>
 
-      <!-- Área de Contenido Dinámico con Animación de Entrada -->
-      <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-8 animate-enter">
+      <!-- Membrete visible únicamente al imprimir / guardar PDF -->
+      <div class="print-only px-2 pb-4 mb-4 border-b border-slate-300 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <ShieldCheck class="w-7 h-7 text-sky-600 shrink-0" />
+          <div>
+            <span class="font-bold text-base text-slate-900 block leading-none">CheckPoint Salud</span>
+            <span class="text-[11px] text-slate-500">Medicina Ocupacional · Cuenca Neuquina</span>
+          </div>
+        </div>
+        <div class="text-right text-xs text-slate-600">
+          <p class="font-semibold text-slate-900">{{ rolConfig.titulo }}</p>
+          <p>Emitido: {{ new Date().toLocaleDateString('es-AR') }}</p>
+        </div>
+      </div>
+
+      <!-- Área de Contenido Dinámico -->
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 print:p-0 animate-enter">
         <PanelOperario v-if="auth.rolActual === 'PACIENTE'" />
         <PanelEmpresa v-else-if="auth.rolActual === 'EMPRESA'" />
         <PanelRecepcion v-else-if="auth.rolActual === 'RECEPCION'" />

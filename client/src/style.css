@@ -41,11 +41,81 @@ body {
 
 /* Micro-elevación en tarjetas interactivas */
 .card-interactive {
-  transition: all 0.2s cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease;
 }
 
 .card-interactive:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  border-color: rgb(203 213 225 / 0.9);
+  box-shadow: 0 10px 25px -5px rgb(15 23 42 / 0.07), 0 4px 10px -4px rgb(15 23 42 / 0.04);
+  border-color: rgb(186 230 253 / 0.9);
+}
+
+/* Botón primario con respuesta táctil, elevación y brillo sutil */
+.btn-interactive {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.btn-interactive:hover:not(:disabled) {
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 20px -4px rgb(15 23 42 / 0.22);
+}
+
+.btn-interactive:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Botón secundario / acción de barra */
+.btn-secondary {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.18s ease,
+              border-color 0.18s ease,
+              color 0.18s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgb(125 211 252);
+}
+
+.btn-secondary:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Estilos de Impresión / Exportación a PDF limpio */
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-clean-card {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+  }
 }

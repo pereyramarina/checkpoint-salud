@@ -1,55 +1,45 @@
 <template>
   <div class="space-y-8">
-    <!-- KPIs de Compliance -->
+    <!-- KPIs de Compliance (íconos sueltos sin recuadro de fondo) -->
     <div v-if="stats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Dotación Evaluada</p>
           <p class="text-2xl font-bold text-slate-900 mt-1">{{ stats.totalDotacion }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
-          <Users class="w-5 h-5" />
-        </div>
+        <Users class="w-6 h-6 text-slate-600 shrink-0" />
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Aptos Vigentes</p>
           <p class="text-2xl font-bold text-emerald-600 mt-1">{{ stats.aptosAlDia }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-          <ShieldCheck class="w-5 h-5" />
-        </div>
+        <ShieldCheck class="w-6 h-6 text-emerald-600 shrink-0" />
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Por Vencer (30d)</p>
           <p class="text-2xl font-bold text-amber-600 mt-1">{{ stats.proximosAVencer30Dias }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-          <AlertTriangle class="w-5 h-5" />
-        </div>
+        <AlertTriangle class="w-6 h-6 text-amber-500 shrink-0" />
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Índice Compliance</p>
           <p class="text-2xl font-bold text-sky-600 mt-1">{{ stats.indiceCompliancePorcentaje }}%</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
-          <TrendingUp class="w-5 h-5" />
-        </div>
+        <TrendingUp class="w-6 h-6 text-sky-600 shrink-0" />
       </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      <!-- Carga Masiva Excel -->
-      <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-            <FileSpreadsheet class="w-4 h-4" />
-          </div>
+      <!-- Carga Masiva Excel (oculta al imprimir reporte) -->
+      <div class="no-print lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
+          <FileSpreadsheet class="w-5 h-5 text-emerald-600 shrink-0" />
           <div>
             <h2 class="text-sm font-semibold text-slate-900">Carga Masiva de Dotación</h2>
             <p class="text-xs text-slate-500">Importación de nómina mediante archivo Excel (.xlsx)</p>
@@ -64,9 +54,9 @@
           <button
             type="button"
             @click="descargarPlantilla"
-            class="w-full py-2.5 px-4 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+            class="btn-secondary group w-full py-2.5 px-4 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Download class="w-4 h-4 text-slate-500" />
+            <Download class="w-4 h-4 text-sky-600 transition-transform duration-200 group-hover:translate-y-0.5" />
             <span>Descargar Plantilla Oficial (.xlsx)</span>
           </button>
 
@@ -77,12 +67,12 @@
               @dragleave.prevent="arrastrando = false"
               @drop.prevent="soltarArchivo"
               :class="[
-                'flex flex-col items-center justify-center p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer text-center',
+                'group flex flex-col items-center justify-center p-5 rounded-xl border-2 border-dashed transition-all cursor-pointer text-center',
                 arrastrando
                   ? 'border-sky-500 bg-sky-50/60'
                   : archivo
                     ? 'border-emerald-300 bg-emerald-50/40'
-                    : 'border-slate-200 bg-slate-50/60 hover:border-slate-300 hover:bg-slate-50'
+                    : 'border-slate-200 bg-slate-50/60 hover:border-sky-300 hover:bg-slate-50'
               ]"
             >
               <input
@@ -93,15 +83,8 @@
                 class="hidden"
               />
 
-              <div
-                :class="[
-                  'w-10 h-10 rounded-xl flex items-center justify-center mb-2.5 transition-colors',
-                  archivo ? 'bg-emerald-100 text-emerald-700' : 'bg-white border border-slate-200 text-slate-600 shadow-2xs'
-                ]"
-              >
-                <FileCheck2 v-if="archivo" class="w-5 h-5" />
-                <FileUp v-else class="w-5 h-5" />
-              </div>
+              <FileCheck2 v-if="archivo" class="w-7 h-7 text-emerald-600 mb-2 transition-transform duration-200 group-hover:scale-110" />
+              <FileUp v-else class="w-7 h-7 text-sky-600 mb-2 transition-transform duration-200 group-hover:-translate-y-0.5" />
 
               <template v-if="archivo">
                 <p class="text-xs font-semibold text-slate-900 truncate max-w-full px-2">
@@ -125,9 +108,9 @@
               type="button"
               :disabled="!archivo || subiendo"
               @click="subirExcel"
-              class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-xs font-semibold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+              class="btn-interactive group w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Upload class="w-4 h-4" />
+              <Upload class="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
               <span>{{ subiendo ? 'Procesando nómina...' : 'Subir y Sincronizar Nómina' }}</span>
             </button>
           </div>
@@ -151,25 +134,45 @@
       </div>
 
       <!-- Aprobación y Seguimiento de Turnos -->
-      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+      <div class="lg:col-span-7 print:col-span-12 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden print-clean-card">
         <div class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
-              <CalendarCheck class="w-4 h-4" />
-            </div>
+          <div class="flex items-center gap-2.5">
+            <CalendarCheck class="w-5 h-5 text-sky-600 shrink-0" />
             <div>
               <h2 class="text-sm font-semibold text-slate-900">Turnos de Mi Dotación</h2>
               <p class="text-xs text-slate-500">Aprobación RRHH y verificación de estado en portería</p>
             </div>
           </div>
 
-          <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 self-start sm:self-auto">
-            {{ turnosFiltrados.length }} {{ turnosFiltrados.length === 1 ? 'registro' : 'registros' }}
-          </span>
+          <div class="no-print flex items-center gap-2 flex-wrap">
+            <button
+              v-if="turnosFiltrados.length > 0"
+              type="button"
+              @click="exportarTurnosExcel"
+              class="btn-secondary group px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-50/60 text-slate-700 hover:text-emerald-800 border border-slate-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+            >
+              <FileSpreadsheet class="w-3.5 h-3.5 text-emerald-600 transition-transform duration-200 group-hover:scale-110" />
+              <span>Exportar Excel</span>
+            </button>
+
+            <button
+              v-if="turnosFiltrados.length > 0"
+              type="button"
+              @click="imprimirReporte"
+              class="btn-secondary group px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+            >
+              <Printer class="w-3.5 h-3.5 text-sky-600 transition-transform duration-200 group-hover:scale-110" />
+              <span>Imprimir / PDF</span>
+            </button>
+
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+              {{ turnosFiltrados.length }} {{ turnosFiltrados.length === 1 ? 'registro' : 'registros' }}
+            </span>
+          </div>
         </div>
 
         <div class="p-6 space-y-4">
-          <div v-if="turnos.length > 0" class="relative">
+          <div v-if="turnos.length > 0" class="no-print relative">
             <Search class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               v-model="busquedaTurno"
@@ -179,17 +182,17 @@
             />
           </div>
 
-          <div v-if="turnos.length === 0" class="p-8 rounded-xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs text-slate-500">
+          <div v-if="turnos.length === 0" class="p-8 rounded-xl bg-slate-50/70 border border-dashed border-slate-200 text-center text-xs text-slate-500">
             No hay turnos registrados para esta empresa.
           </div>
-          <div v-else-if="turnosFiltrados.length === 0" class="p-8 rounded-xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs text-slate-500">
+          <div v-else-if="turnosFiltrados.length === 0" class="p-8 rounded-xl bg-slate-50/70 border border-dashed border-slate-200 text-center text-xs text-slate-500">
             No se encontraron operarios que coincidan con "{{ busquedaTurno }}".
           </div>
 
           <div
             v-for="t in turnosFiltrados"
             :key="t.id"
-            class="p-4 rounded-xl border border-slate-200/90 bg-slate-50/40 hover:bg-white transition-colors space-y-3"
+            class="card-interactive p-4 rounded-xl border border-slate-200/90 bg-slate-50/40 hover:bg-white space-y-3"
           >
             <div class="flex items-start justify-between gap-3 flex-wrap">
               <div>
@@ -209,22 +212,22 @@
               <span>{{ formatearSede(t.sede) }}</span>
             </div>
 
-            <div class="flex items-center gap-2.5 flex-wrap pt-1">
+            <div class="no-print flex items-center gap-2.5 flex-wrap pt-1">
               <button
                 v-if="t.estado === 'PROPUESTO_CLINICA'"
                 @click="aprobarTurno(t.id)"
-                class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                class="btn-interactive group px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
               >
-                <CheckCircle2 class="w-3.5 h-3.5" />
-                Aprobar Turno (RRHH)
+                <CheckCircle2 class="w-3.5 h-3.5 transition-transform duration-200 group-hover:scale-110" />
+                <span>Aprobar Turno (RRHH)</span>
               </button>
               <router-link
                 :to="`/verificar/${t.paciente.dni}`"
                 target="_blank"
-                class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold transition-all flex items-center gap-1.5"
+                class="btn-secondary group px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold flex items-center gap-1.5"
               >
-                <ExternalLink class="w-3.5 h-3.5 text-slate-500" />
-                Verificar Portería
+                <ExternalLink class="w-3.5 h-3.5 text-sky-600 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span>Verificar Portería</span>
               </router-link>
             </div>
           </div>
@@ -236,6 +239,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import * as XLSX from 'xlsx';
 import {
   Users,
   ShieldCheck,
@@ -250,6 +254,7 @@ import {
   Search,
   CheckCircle2,
   ExternalLink,
+  Printer,
 } from 'lucide-vue-next';
 import http from '../api/http';
 
@@ -336,6 +341,27 @@ async function subirExcel() {
 async function aprobarTurno(id: string) {
   await http.patch(`/turnos/${id}/aprobar-empresa`);
   await cargarDatos();
+}
+
+function exportarTurnosExcel() {
+  const filas = turnosFiltrados.value.map((t) => ({
+    Operario: t.paciente.nombreCompleto,
+    DNI: t.paciente.dni,
+    Puesto: t.puesto.nombrePuesto,
+    'Fecha y Hora': new Date(t.fechaHora).toLocaleString('es-AR'),
+    Sede: formatearSede(t.sede),
+    Estado: t.estado,
+  }));
+
+  const hoja = XLSX.utils.json_to_sheet(filas);
+  hoja['!cols'] = [{ wch: 28 }, { wch: 14 }, { wch: 26 }, { wch: 22 }, { wch: 22 }, { wch: 22 }];
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, 'Dotacion_Turnos');
+  XLSX.writeFile(libro, `Reporte_Dotacion_${new Date().toISOString().slice(0, 10)}.xlsx`);
+}
+
+function imprimirReporte() {
+  window.print();
 }
 
 onMounted(cargarDatos);
