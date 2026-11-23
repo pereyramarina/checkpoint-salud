@@ -154,7 +154,12 @@
             </div>
             <div class="flex items-center gap-2 text-slate-600">
               <Building2 class="w-4 h-4 text-sky-600 shrink-0" />
-              <span>Empresa: <strong class="text-slate-800">{{ t.aprobadoPorEmpresa ? 'Aprobado' : 'Pendiente' }}</strong></span>
+              <span>
+                Empresa:
+                <strong class="text-slate-800">
+                  {{ t.aprobadoPorEmpresa || t.estado === 'ATENDIDO' ? 'Aprobado' : 'Pendiente' }}
+                </strong>
+              </span>
             </div>
           </div>
 
