@@ -1,45 +1,37 @@
 <template>
   <div class="space-y-8">
-    <!-- Métricas del Consultorio -->
+    <!-- Métricas del Consultorio (íconos sueltos sin cajita de fondo) -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Pendientes de Evaluación</p>
           <p class="text-2xl font-bold text-amber-600 mt-1">{{ turnosPendientes.length }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-          <ClipboardList class="w-5 h-5" />
-        </div>
+        <ClipboardList class="w-6 h-6 text-amber-500 shrink-0" />
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Certificados Emitidos</p>
           <p class="text-2xl font-bold text-slate-900 mt-1">{{ aptos.length }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
-          <FileCheck2 class="w-5 h-5" />
-        </div>
+        <FileCheck2 class="w-6 h-6 text-sky-600 shrink-0" />
       </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+      <div class="card-interactive bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-medium text-slate-500">Privacidad Clínica</p>
           <p class="text-sm font-bold text-emerald-700 mt-1.5">Ley N° 25.326 Activa</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-          <Lock class="w-5 h-5" />
-        </div>
+        <Lock class="w-6 h-6 text-emerald-600 shrink-0" />
       </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      <!-- Columna Izquierda: Emisión de Apto Médico -->
-      <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
-            <Stethoscope class="w-4 h-4" />
-          </div>
+      <!-- Columna Izquierda: Emisión de Apto Médico (oculta al imprimir) -->
+      <div class="no-print lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2.5">
+          <Stethoscope class="w-5 h-5 text-sky-600 shrink-0" />
           <div>
             <h2 class="text-sm font-semibold text-slate-900">Emitir Certificado de Aptitud</h2>
             <p class="text-xs text-slate-500">Firma médica y generación automática de credencial QR</p>
@@ -97,9 +89,9 @@
             <button
               type="submit"
               :disabled="emitiendo"
-              class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+              class="btn-interactive group w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
             >
-              <FileSignature class="w-4 h-4" />
+              <FileSignature class="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
               <span>{{ emitiendo ? 'Firmando certificado...' : 'Firmar y Emitir Apto' }}</span>
             </button>
 
@@ -112,26 +104,46 @@
       </div>
 
       <!-- Columna Derecha: Historial Clínico Emitido -->
-      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-              <FolderHeart class="w-4 h-4" />
-            </div>
+      <div class="lg:col-span-7 print:col-span-12 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden print-clean-card">
+        <div class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <FolderHeart class="w-5 h-5 text-indigo-600 shrink-0" />
             <div>
               <h2 class="text-sm font-semibold text-slate-900">Historial Clínico Emitido</h2>
               <p class="text-xs text-slate-500">Registro confidencial de evaluaciones realizadas</p>
             </div>
           </div>
 
-          <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
-            {{ aptosFiltrados.length }} {{ aptosFiltrados.length === 1 ? 'registro' : 'registros' }}
-          </span>
+          <div class="no-print flex items-center gap-2 flex-wrap">
+            <button
+              v-if="aptosFiltrados.length > 0"
+              type="button"
+              @click="exportarAptosExcel"
+              class="btn-secondary group px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-50/60 text-slate-700 hover:text-emerald-800 border border-slate-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+            >
+              <FileSpreadsheet class="w-3.5 h-3.5 text-emerald-600 transition-transform duration-200 group-hover:scale-110" />
+              <span>Exportar Excel</span>
+            </button>
+
+            <button
+              v-if="aptosFiltrados.length > 0"
+              type="button"
+              @click="imprimirHistorial"
+              class="btn-secondary group px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+            >
+              <Printer class="w-3.5 h-3.5 text-sky-600 transition-transform duration-200 group-hover:scale-110" />
+              <span>Imprimir / PDF</span>
+            </button>
+
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+              {{ aptosFiltrados.length }} {{ aptosFiltrados.length === 1 ? 'registro' : 'registros' }}
+            </span>
+          </div>
         </div>
 
         <div class="p-6 space-y-4">
           <!-- Buscador -->
-          <div v-if="aptos.length > 0" class="relative">
+          <div v-if="aptos.length > 0" class="no-print relative">
             <Search class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               v-model="busquedaHistorial"
@@ -141,17 +153,17 @@
             />
           </div>
 
-          <div v-if="aptos.length === 0" class="p-8 rounded-xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs text-slate-500">
+          <div v-if="aptos.length === 0" class="p-8 rounded-xl bg-slate-50/70 border border-dashed border-slate-200 text-center text-xs text-slate-500">
             No hay certificados emitidos todavía.
           </div>
-          <div v-else-if="aptosFiltrados.length === 0" class="p-8 rounded-xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs text-slate-500">
+          <div v-else-if="aptosFiltrados.length === 0" class="p-8 rounded-xl bg-slate-50/70 border border-dashed border-slate-200 text-center text-xs text-slate-500">
             No se encontraron registros que coincidan con "{{ busquedaHistorial }}".
           </div>
 
           <div
             v-for="a in aptosFiltrados"
             :key="a.id"
-            class="p-4 rounded-xl border border-slate-200/90 bg-slate-50/40 hover:bg-white transition-colors space-y-3"
+            class="card-interactive p-4 rounded-xl border border-slate-200/90 bg-slate-50/40 hover:bg-white space-y-3"
           >
             <div class="flex items-start justify-between gap-3 flex-wrap">
               <div>
@@ -179,10 +191,10 @@
               <router-link
                 :to="`/verificar/${a.paciente.dni}`"
                 target="_blank"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold transition-all"
+                class="no-print btn-secondary group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold"
               >
-                <ExternalLink class="w-3.5 h-3.5 text-slate-500" />
-                Verificar Portería
+                <ExternalLink class="w-3.5 h-3.5 text-sky-600 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <span>Verificar Portería</span>
               </router-link>
             </div>
           </div>
@@ -194,6 +206,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import * as XLSX from 'xlsx';
 import {
   ClipboardList,
   FileCheck2,
@@ -204,6 +217,8 @@ import {
   Search,
   ExternalLink,
   CheckCircle2,
+  FileSpreadsheet,
+  Printer,
 } from 'lucide-vue-next';
 import http from '../api/http';
 
@@ -267,6 +282,25 @@ async function emitirApto() {
   } finally {
     emitiendo.value = false;
   }
+}
+
+function exportarAptosExcel() {
+  const filas = aptosFiltrados.value.map((a) => ({
+    Operario: a.paciente.nombreCompleto,
+    DNI: a.paciente.dni,
+    Dictamen: formatearResultado(a.resultado),
+    Vencimiento: new Date(a.fechaVencimiento).toLocaleDateString('es-AR'),
+  }));
+
+  const hoja = XLSX.utils.json_to_sheet(filas);
+  hoja['!cols'] = [{ wch: 28 }, { wch: 14 }, { wch: 24 }, { wch: 18 }];
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, 'Certificados_Emitidos');
+  XLSX.writeFile(libro, `Certificados_Emitidos_${new Date().toISOString().slice(0, 10)}.xlsx`);
+}
+
+function imprimirHistorial() {
+  window.print();
 }
 
 onMounted(cargarDatos);

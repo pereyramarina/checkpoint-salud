@@ -7,7 +7,7 @@
       @mouseleave="onMouseLeave"
       class="hidden lg:flex flex-col justify-between bg-slate-950 text-white p-12 relative overflow-hidden"
     >
-      <!-- Capa 1 (Fondo profundo): Orbes de luz con animación flotante + parallax amplio -->
+      <!-- Capa 1 (Fondo profundo) -->
       <div
         :style="estiloCapaFondo"
         class="absolute -inset-24 transition-transform duration-300 ease-out pointer-events-none"
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <!-- Capa 2 (Plano medio): Grilla técnica con desplazamiento continuo + parallax medio -->
+      <!-- Capa 2 (Plano medio) -->
       <div
         :style="estiloCapaMedia"
         class="absolute -inset-20 transition-transform duration-300 ease-out pointer-events-none [mask-image:radial-gradient(ellipse_80%_70%_at_50%_50%,#000_45%,transparent_100%)]"
@@ -26,18 +26,18 @@
         <div class="grid-animada w-full h-full opacity-45"></div>
       </div>
 
-      <!-- Header (Fijo) -->
-      <div class="relative z-10 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-400/20 flex items-center justify-center text-sky-400 backdrop-blur-xs">
-          <ShieldCheck class="w-6 h-6" />
-        </div>
+      <!-- Header: ícono suelto sin cajita de sombra -->
+      <div class="relative z-10 flex items-center gap-3 group">
+        <ShieldCheck class="w-9 h-9 text-sky-400 shrink-0 transition-transform duration-300 group-hover:scale-105" />
         <div>
-          <span class="font-bold text-lg tracking-tight block leading-none">CheckPoint Salud</span>
+          <span class="font-bold text-lg tracking-tight block leading-none">
+            CheckPoint <span class="text-sky-400">Salud</span>
+          </span>
           <span class="text-xs text-slate-400">Medicina Ocupacional</span>
         </div>
       </div>
 
-      <!-- Contenido Principal (Completamente quieto para máxima legibilidad) -->
+      <!-- Contenido Principal -->
       <div class="relative z-10 max-w-md space-y-6">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-300 text-xs font-medium backdrop-blur-xs">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -53,41 +53,42 @@
         </p>
 
         <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-800/80">
-          <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800/90 backdrop-blur-xs">
+          <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800/90 backdrop-blur-xs transition-colors hover:border-sky-500/40">
             <p class="text-xs text-slate-400">Privacidad Clínica</p>
             <p class="text-sm font-semibold text-slate-200 mt-0.5">Ley N° 25.326</p>
           </div>
-          <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800/90 backdrop-blur-xs">
+          <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800/90 backdrop-blur-xs transition-colors hover:border-emerald-500/40">
             <p class="text-xs text-slate-400">Control en Portería</p>
             <p class="text-sm font-semibold text-slate-200 mt-0.5">Validación QR Instantánea</p>
           </div>
         </div>
       </div>
 
-      <!-- Footer (Fijo) -->
+      <!-- Footer -->
       <div class="relative z-10 flex items-center justify-between text-xs text-slate-500">
         <span>© 2026 CheckPoint Salud · Cuenca Neuquina</span>
-        <router-link to="/verificar" class="text-slate-400 hover:text-sky-400 transition-colors flex items-center gap-1">
-          Acceso Portería <ArrowUpRight class="w-3.5 h-3.5" />
+        <router-link to="/verificar" class="group text-slate-400 hover:text-sky-400 transition-colors flex items-center gap-1">
+          <span>Acceso Portería</span>
+          <ArrowUpRight class="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </router-link>
       </div>
     </div>
 
     <!-- Panel Derecho: Formulario de Ingreso -->
     <div class="flex flex-col justify-center items-center p-6 sm:p-12 bg-slate-50/50">
-      <div class="w-full max-w-md space-y-8">
-        <!-- Header móvil -->
-        <div class="lg:hidden flex items-center gap-3 justify-center">
-          <div class="w-10 h-10 rounded-xl bg-slate-900 text-sky-400 flex items-center justify-center">
-            <ShieldCheck class="w-6 h-6" />
-          </div>
+      <div class="w-full max-w-md space-y-8 animate-enter">
+        <!-- Header móvil con ícono limpio -->
+        <div class="lg:hidden flex items-center gap-2.5 justify-center">
+          <ShieldCheck class="w-8 h-8 text-sky-600 shrink-0" />
           <div class="text-left">
-            <h1 class="font-bold text-xl text-slate-900 leading-none">CheckPoint Salud</h1>
+            <h1 class="font-bold text-xl text-slate-900 leading-none">
+              CheckPoint <span class="text-sky-600">Salud</span>
+            </h1>
             <p class="text-xs text-slate-500 mt-0.5">Medicina Ocupacional · Cuenca Neuquina</p>
           </div>
         </div>
 
-        <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+        <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
           <div class="space-y-1.5">
             <h2 class="text-xl font-semibold tracking-tight text-slate-900">Iniciar sesión</h2>
             <p class="text-sm text-slate-500">Seleccioná tu perfil para acceder al sistema.</p>
@@ -98,25 +99,27 @@
               type="button"
               @click="cambiarModo('OPERARIO')"
               :class="[
-                'flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all cursor-pointer',
+                'group flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer',
                 modo === 'OPERARIO'
                   ? 'bg-white text-slate-900 shadow-xs ring-1 ring-slate-200/80'
                   : 'text-slate-600 hover:text-slate-900'
               ]"
             >
-              <HardHat class="w-4 h-4 text-sky-600" /> Operario (DNI)
+              <HardHat class="w-4 h-4 text-sky-600 transition-transform duration-200 group-hover:scale-110" />
+              <span>Operario (DNI)</span>
             </button>
             <button
               type="button"
               @click="cambiarModo('CORPORATIVO')"
               :class="[
-                'flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all cursor-pointer',
+                'group flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-200 cursor-pointer',
                 modo === 'CORPORATIVO'
                   ? 'bg-white text-slate-900 shadow-xs ring-1 ring-slate-200/80'
                   : 'text-slate-600 hover:text-slate-900'
               ]"
             >
-              <Building2 class="w-4 h-4 text-sky-600" /> Clínica / Empresa
+              <Building2 class="w-4 h-4 text-sky-600 transition-transform duration-200 group-hover:scale-110" />
+              <span>Clínica / Empresa</span>
             </button>
           </div>
 
@@ -136,10 +139,10 @@
             <button
               type="submit"
               :disabled="cargando"
-              class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+              class="btn-interactive group w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>{{ cargando ? 'Verificando padrón...' : 'Ingresar a mis Turnos y QR' }}</span>
-              <ArrowRight class="w-4 h-4" />
+              <ArrowRight class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
             </button>
           </form>
 
@@ -167,10 +170,10 @@
             <button
               type="submit"
               :disabled="cargando"
-              class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+              class="btn-interactive group w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>{{ cargando ? 'Autenticando...' : 'Iniciar Sesión' }}</span>
-              <ArrowRight class="w-4 h-4" />
+              <ArrowRight class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
             </button>
           </form>
 
@@ -181,8 +184,9 @@
         </div>
 
         <div class="text-center">
-          <router-link to="/verificar" class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors">
-            <QrCode class="w-4 h-4 text-sky-600" /> ¿Sos guardia de portería? Verificar credencial sin iniciar sesión
+          <router-link to="/verificar" class="group inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors">
+            <QrCode class="w-4 h-4 text-sky-600 transition-transform duration-200 group-hover:scale-110" />
+            <span>¿Sos guardia de portería? Verificar credencial sin iniciar sesión</span>
           </router-link>
         </div>
       </div>
@@ -205,7 +209,6 @@ const password = ref('');
 const cargando = ref(false);
 const error = ref('');
 
-// Parallax solo en capas de fondo
 const panelIzquierdo = ref<HTMLElement | null>(null);
 const offsetX = ref(0);
 const offsetY = ref(0);
@@ -280,20 +283,12 @@ async function ingresarCorporativo() {
 }
 
 @keyframes desplazarGrilla {
-  0% {
-    background-position: 0px 0px;
-  }
-  100% {
-    background-position: 64px 64px;
-  }
+  0% { background-position: 0px 0px; }
+  100% { background-position: 64px 64px; }
 }
 
 @keyframes flotarSuave {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  100% {
-    transform: translate(-30px, 25px) scale(1.08);
-  }
+  0% { transform: translate(0px, 0px) scale(1); }
+  100% { transform: translate(-30px, 25px) scale(1.08); }
 }
 </style>

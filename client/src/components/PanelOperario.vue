@@ -1,12 +1,10 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     <!-- Columna Izquierda: Credencial Digital QR -->
-    <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+    <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden print-clean-card">
+      <div class="no-print px-6 py-4 border-b border-slate-100 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
-            <QrCode class="w-4 h-4" />
-          </div>
+          <QrCode class="w-5 h-5 text-sky-600 shrink-0" />
           <div>
             <h2 class="text-sm font-semibold text-slate-900">Credencial de Aptitud</h2>
             <p class="text-xs text-slate-500">Habilitación digital para portería</p>
@@ -20,7 +18,7 @@
           <div class="rounded-2xl border border-slate-200 bg-gradient-to-b from-slate-900 to-slate-950 text-white p-5 shadow-sm space-y-4">
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
-                <ShieldCheck class="w-4 h-4 text-sky-400" />
+                <ShieldCheck class="w-4 h-4 text-sky-400 shrink-0" />
                 <span class="text-xs font-bold tracking-wide uppercase text-slate-300">CheckPoint Salud</span>
               </div>
               <span
@@ -63,31 +61,41 @@
             </div>
           </div>
 
-          <!-- Acciones de la Credencial -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <a
-              :href="credencial.qrCodeDataUrl"
-              :download="`Credencial_CheckPoint_${credencial.dni}.png`"
-              class="py-2.5 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2"
-            >
-              <Download class="w-3.5 h-3.5" />
-              <span>Descargar QR Offline</span>
-            </a>
+          <!-- Acciones de la Credencial (ocultas al imprimir) -->
+          <div class="no-print space-y-2.5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <a
+                :href="credencial.qrCodeDataUrl"
+                :download="`Credencial_CheckPoint_${credencial.dni}.png`"
+                class="btn-interactive group py-2.5 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2"
+              >
+                <Download class="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-y-0.5" />
+                <span>Descargar QR</span>
+              </a>
+              <button
+                type="button"
+                @click="imprimirCredencial"
+                class="btn-secondary group py-2.5 px-3.5 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Printer class="w-3.5 h-3.5 text-sky-600 transition-transform duration-200 group-hover:scale-110" />
+                <span>Imprimir / PDF</span>
+              </button>
+            </div>
+
             <router-link
               :to="`/verificar/${credencial.dni}`"
               target="_blank"
-              class="py-2.5 px-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
+              class="btn-secondary group w-full py-2 px-3.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold rounded-xl flex items-center justify-center gap-2"
             >
-              <ExternalLink class="w-3.5 h-3.5 text-slate-500" />
-              <span>Vista Portería</span>
+              <ExternalLink class="w-3.5 h-3.5 text-sky-600 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <span>Abrir Vista Pública de Portería</span>
             </router-link>
           </div>
         </div>
 
-        <div v-else-if="sinCertificado" class="p-6 rounded-xl bg-slate-50 border border-dashed border-slate-300 text-center space-y-2">
-          <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-            <Clock class="w-5 h-5" />
-          </div>
+        <!-- Estado sin certificado: ícono suelto limpio sin círculo amarillo de fondo -->
+        <div v-else-if="sinCertificado" class="p-6 rounded-xl bg-slate-50/70 border border-dashed border-slate-300 text-center space-y-2.5">
+          <Clock class="w-7 h-7 text-amber-500 mx-auto" />
           <h3 class="text-sm font-semibold text-slate-900">Certificado en trámite</h3>
           <p class="text-xs text-slate-500 leading-relaxed">
             Tu credencial QR aparecerá aquí automáticamente una vez que el médico complete tu examen preocupacional o periódico.
@@ -100,13 +108,11 @@
       </div>
     </div>
 
-    <!-- Columna Derecha: Agenda de Turnos Médicos -->
-    <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+    <!-- Columna Derecha: Agenda de Turnos Médicos (oculta al imprimir credencial) -->
+    <div class="no-print lg:col-span-7 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
       <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-            <CalendarClock class="w-4 h-4" />
-          </div>
+          <CalendarClock class="w-5 h-5 text-indigo-600 shrink-0" />
           <div>
             <h2 class="text-sm font-semibold text-slate-900">Mis Turnos Médicos</h2>
             <p class="text-xs text-slate-500">Confirmación de asistencia y solicitudes de reprogramación</p>
@@ -118,14 +124,14 @@
       </div>
 
       <div class="p-6 space-y-4">
-        <div v-if="turnos.length === 0" class="p-8 rounded-xl bg-slate-50 border border-dashed border-slate-200 text-center text-xs text-slate-500">
+        <div v-if="turnos.length === 0" class="p-8 rounded-xl bg-slate-50/70 border border-dashed border-slate-200 text-center text-xs text-slate-500">
           No tenés turnos médicos asignados actualmente.
         </div>
 
         <div
           v-for="t in turnos"
           :key="t.id"
-          class="p-4 sm:p-5 rounded-xl border border-slate-200/90 bg-slate-50/40 hover:bg-white transition-colors space-y-4"
+          class="card-interactive p-4 sm:p-5 rounded-xl border border-slate-200/90 bg-slate-50/40 hover:bg-white space-y-4"
         >
           <div class="flex items-start justify-between gap-3 flex-wrap">
             <div>
@@ -139,15 +145,15 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-200/60 text-xs">
             <div class="flex items-center gap-2 text-slate-600">
-              <Calendar class="w-4 h-4 text-slate-400 shrink-0" />
+              <Calendar class="w-4 h-4 text-sky-600 shrink-0" />
               <span>{{ formatearFechaHora(t.fechaHora) }}</span>
             </div>
             <div class="flex items-center gap-2 text-slate-600">
-              <MapPin class="w-4 h-4 text-slate-400 shrink-0" />
+              <MapPin class="w-4 h-4 text-sky-600 shrink-0" />
               <span>{{ formatearSede(t.sede) }}</span>
             </div>
             <div class="flex items-center gap-2 text-slate-600">
-              <Building2 class="w-4 h-4 text-slate-400 shrink-0" />
+              <Building2 class="w-4 h-4 text-sky-600 shrink-0" />
               <span>Empresa: <strong class="text-slate-800">{{ t.aprobadoPorEmpresa ? 'Aprobado' : 'Pendiente' }}</strong></span>
             </div>
           </div>
@@ -156,25 +162,25 @@
             <button
               v-if="!t.confirmadoPorPaciente"
               @click="confirmarAsistencia(t.id)"
-              class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+              class="btn-interactive group px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
             >
-              <CheckCircle2 class="w-3.5 h-3.5" />
-              Confirmar Asistencia
+              <CheckCircle2 class="w-3.5 h-3.5 transition-transform duration-200 group-hover:scale-110" />
+              <span>Confirmar Asistencia</span>
             </button>
             <span
               v-else
               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-semibold"
             >
-              <CheckCircle2 class="w-3.5 h-3.5" />
+              <CheckCircle2 class="w-3.5 h-3.5 text-emerald-600" />
               Asistencia Confirmada
             </span>
 
             <button
               @click="abrirReprogramacion(t.id)"
-              class="px-3.5 py-2 rounded-xl bg-white hover:bg-amber-50 text-amber-700 border border-amber-300 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer"
+              class="btn-secondary group px-3.5 py-2 rounded-xl bg-white hover:bg-amber-50 text-amber-700 border border-amber-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
             >
-              <RefreshCw class="w-3.5 h-3.5" />
-              Solicitar Cambio de Fecha
+              <RefreshCw class="w-3.5 h-3.5 text-amber-600 transition-transform duration-300 group-hover:rotate-90" />
+              <span>Solicitar Cambio de Fecha</span>
             </button>
           </div>
 
@@ -188,7 +194,7 @@
             />
             <button
               @click="enviarReprogramacion(t.id)"
-              class="px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer shrink-0"
+              class="btn-interactive px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer shrink-0"
             >
               Enviar Solicitud
             </button>
@@ -205,6 +211,7 @@ import {
   QrCode,
   ShieldCheck,
   Download,
+  Printer,
   ExternalLink,
   Clock,
   CalendarClock,
@@ -237,6 +244,10 @@ async function cargarDatos() {
       sinCertificado.value = true;
     }
   }
+}
+
+function imprimirCredencial() {
+  window.print();
 }
 
 async function confirmarAsistencia(id: string) {
